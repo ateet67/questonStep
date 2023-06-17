@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row nav">
+        <div class="col-lg-12 my-5">
+            <button data-bs-target="#customtab1" data-bs-toggle="tab" role="tab" class="d-none"></button>
+            <div class="tab-content" id="myTabContent">
+
+
+            </div>
+            <ul class="" id="myTab">
+            </ul>
+        </div>
+        <div class="col-lg-12">
+            <div class="tab-pane fade" id="customtab6" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                <h1>Your Answers:</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let questions = [
+        {
+            id: 1,
+            answer: "d",
+            selected: "",
+            text: "Which of the following terms is NOT used in the field of Banking & Finance ?",
+            options: [{
+                text: "(a) Over draft",
+                value: "a"
+            },
+            {
+                text: "(b) Base Line",
+                value: "b"
+            },
+            {
+                text: "(c) SWIFT",
+                value: "c"
+            }, {
+                text: "(d) GBC",
+                value: "d"
+            }]
+        },
+        {
+            id: 2,
+            answer: "d",
+            selected: "",
+            text: "Marketing of Education Loans can be done by....",
+            options: [{
+                text: "(a) approaching eligible students",
+                value: "a"
+            },
+            {
+                text: "(b) having tie-ups with Educational Institutes",
+                value: "b"
+            },
+            {
+                text: "(c) approaching colleges",
+                value: "c"
+            }, {
+                text: "(d) All of these",
+                value: "d"
+            }]
+        },
+        {
+            id: 3,
+            answer: "d",
+            selected: "",
+            text: "Which of the following monuments is not in Delhi?",
+            options: [{
+                text: "(a) Purana Kila",
+                value: "a"
+            },
+            {
+                text: "(b) Qutab Minar",
+                value: "b"
+            },
+            {
+                text: "(c) Red Fort",
+                value: "c"
+            }, {
+                text: "(d) Char Minaar",
+                value: "d"
+            }]
+        },
+        {
+            id: 4,
+            answer: "d",
+            selected: "",
+            text: "‘Jog falls’ are in:",
+            options: [{
+                text: "(a) Kerala",
+                value: "a"
+            },
+            {
+                text: "(b) J & K",
+                value: "b"
+            },
+            {
+                text: "(c) U.P.",
+                value: "c"
+            }, {
+                text: "(d) Karnataka",
+                value: "d"
+            }]
+        },
+        {
+            id: 5,
+            answer: "d",
+            selected: "",
+            text: "When a bank returns a cheque unpaid, it is called :",
+            options: [{
+                text: "(a) payment of the cheque",
+                value: "a"
+            },
+            {
+                text: "(b) drawing of the cheque",
+                value: "b"
+            },
+            {
+                text: "(c) cancelling of the cheque",
+                value: "c"
+            }, {
+                text: "(d) dis-honour of the cheque",
+                value: "d"
+            }]
+        }
+    ];
+
+    const SelectAnswer = (id, answer) => {
+        questions[id - 1].selected = answer;
+    }
+
+    const GenerateResult = () => {
+        $("#customtab6").append(`<div class="card">
+                                  <div class="card-body">
+                                    ${(questions.map(e => `
+                                    <h5 class="card-title">${e.text} <span class="badge text-bg-${e.answer == e.selected ? "success" : "danger"}"> ${e.answer == e.selected ? "Right" : `Wrong `}</span> <span class="text-secondary">
+                                        ${e.answer != e.selected ? (e.options.find(val => val.value == e.answer)).text : ''}</span> </h5>
+                                    <h6 class="card-subtitle mb-2 text-body-secondary">${(e.options.find(val => val.value == e.selected)).text}</h6>
+                                   <hr/>`)).join("")}
+                                   </div>
+                                </div>`
+        );
+    }
+
+    function onNextClick(id) {
+        if (questions[id - 1].selected == "") {
+            alert("Pleas Select!!");
+
+            console.log(`[data-bs-target="#customtab${id - 1}"]`)
+            $(`[data-bs-target="#customtab${id}"]`).click();
+        };
+        if (id == 5) {
+            GenerateResult();
+        }
+    }
+
+    let card = (que, opts) => `<div class="tab-pane fade show" id="customtab${que.id}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                        <div class="card w-50" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">${que.text}</h5>
+                                ${(opts.map(e => `<div><input type="radio" name="Answer${que.id}" value=${e.value} onChange="SelectAnswer(${que.id},'${e.value}')"/> ${e.text}</div>`)).join("")}
+                                <button onclick="onNextClick(${que.id})" class="btn btn-sm btn-primary d-block my-2" data-bs-toggle="tab" role="tab" data-bs-target="#customtab${que.id != 5 ? que.id + 1 : 6}"> ${que.id < 5 ? "Next" : "Show Answers"} </button>
+                            </div>
+                        </div>
+                    </div>`;
+    let Tabbutton = `<li class="" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
+                        </li>`;
+
+    questions.forEach((e) => {
+        $("#myTabContent").append(card(e, e.options));
+    })
+
+    setTimeout(() => {
+        $('[data-bs-target="#customtab1"]').click();
+    }, 500);
+</script>
